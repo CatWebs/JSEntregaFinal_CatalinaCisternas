@@ -95,62 +95,13 @@ let ventaRonda = {};
 
 
 function variablesIniciales() {
-    //________________________________________________________________________________________________________________________________________  OPERADOR TERNARIO
-    // Bool inicializador
-    // if (localStorage.getItem("inicializador")){
-    //     inicializador = JSON.parse(localStorage.getItem("inicializador"));
-    // }else{
-    //     inicializador = true;
-    // }
-    localStorage.getItem("inicializador") ? inicializador = JSON.parse(localStorage.getItem("inicializador")) : inicializador = true;
-
-    // Bool para volver a comprar
-    // if (localStorage.getItem("volverAComprar")){
-    //     volverAComprar = JSON.parse(localStorage.getItem("volverAComprar"));
-    // }else{
-    //     volverAComprar = true;
-    // }
-    localStorage.getItem("volverAComprar") ? volverAComprar = JSON.parse(localStorage.getItem("volverAComprar")) : volverAComprar = true;
-
-
-    // Para los datos del jugador
-    // if (localStorage.getItem("datosJugador")){
-    //     datosJugador = JSON.parse(localStorage.getItem("datosJugador"));
-    // }else{
-    //     datosJugador = {
-    //         cajaRegistradora: 3000,
-    //         slurmVendida: 0,
-    //         deudaInversion: 500000
-    //     };
-    // }
-    localStorage.getItem("datosJugador") ? datosJugador = JSON.parse(localStorage.getItem("datosJugador")) : datosJugador = {cajaRegistradora: 3000, slurmVendida: 0, deudaInversion: 500000};
-
-    // Para los datos de venta de Ronda
-    // if (localStorage.getItem("ventaRonda")){
-    //     ventaRonda = JSON.parse(localStorage.getItem("ventaRonda"));
-    // }else{
-    //     ventaRonda = {
-    //         ventaTotalRonda: 0,
-    //         slurmTotalRonda: 0,
-    //     };
-    // }
-    localStorage.getItem("ventaRonda") ? ventaRonda = JSON.parse(localStorage.getItem("ventaRonda")) : ventaRonda = {ventaTotalRonda: 0, slurmTotalRonda: 0};
-
-    // Para las rondas
-    // if (localStorage.getItem("ronda")){
-    //     ronda = JSON.parse(localStorage.getItem("ronda"));
-    // }else{
-    //     ronda = 1;
-    // }
-    localStorage.getItem("ronda") ? ronda = JSON.parse(localStorage.getItem("ronda")) : ronda = 1;
-
-    // Para los trabajadores Adquiridos
-    // if (localStorage.getItem("trabajadoresAdquiridos")){
-    //     trabajadoresAdquiridos = JSON.parse(localStorage.getItem("trabajadoresAdquiridos"));
-    // }else{
-    //     trabajadoresAdquiridos = [];
-    // }
-    localStorage.getItem("trabajadoresAdquiridos") ? trabajadoresAdquiridos = JSON.parse(localStorage.getItem("trabajadoresAdquiridos")) : trabajadoresAdquiridos = [];
+    //________________________________________________________________________________________________________________________________________  OPERADOR OR
+    inicializador = JSON.parse(localStorage.getItem("inicializador")) || true;
+    volverAComprar = JSON.parse(localStorage.getItem("volverAComprar")) || true;
+    datosJugador = JSON.parse(localStorage.getItem("datosJugador")) || {cajaRegistradora: 3000, slurmVendida: 0, deudaInversion: 500000};
+    ventaRonda = JSON.parse(localStorage.getItem("ventaRonda")) || {ventaTotalRonda: 0, slurmTotalRonda: 0};
+    ronda = JSON.parse(localStorage.getItem("ronda")) || 1;
+    trabajadoresAdquiridos = JSON.parse(localStorage.getItem("trabajadoresAdquiridos")) || [];
 };
 
 const iniciarJuego = document.getElementById("iniciarJuego");
@@ -179,11 +130,6 @@ reiniciarJuego.onclick = reiniciar;
 function actualizarDatos(){
     rondaActual.innerText = ronda-1;
     //________________________________________________________________________________________________________________________________________  OPERADOR TERNARIO
-    // if (ronda == 11){
-    //     rondaHTML.innerText = "Fin";
-    // }else{
-    //     rondaHTML.innerText = ronda;
-    // }
     ronda == 11 ? rondaHTML.innerText = "Fin" : rondaHTML.innerText = ronda;
     cajaRegistradoraHTML.innerText = datosJugador.cajaRegistradora;
     cantidadVendidaHTML.innerText = datosJugador.slurmVendida;
@@ -209,7 +155,6 @@ function interfazInicial(){
 function iniciar(){
     variablesIniciales();
     if (inicializador){
-        inicializador = false;
         variablesIniciales();
         interfaz.className = "interfaz";
         interfazInicial();
@@ -217,6 +162,7 @@ function iniciar(){
     }else{
         avisos.innerText = `Ha ocurrido un problema. Ya has iniciado. Si quieres volver a empezar presiona "Reiniciar Juego"`;
     }
+    inicializador = false;
 }
 
 function abrirTienda() {
@@ -224,11 +170,6 @@ function abrirTienda() {
     boton2.className += " noMostrar";
     boton1.className += " noMostrar";
     //________________________________________________________________________________________________________________________________________  OPERADOR TERNARIO
-    // if (trabajadoresAdquiridos.length == 0){
-    //     avisos.innerText = "Avisos: No tienes trabajadores. Te recomiendo comprar, de lo contrario no tendras ventas en esta ronda";
-    // }else{
-    //     avisos.innerText = "Elige el trabajador que desees comprar. Sino, puedes volver";
-    // }
     trabajadoresAdquiridos.length == 0 ? avisos.innerText = "Avisos: No tienes trabajadores. Te recomiendo comprar, de lo contrario no tendras ventas en esta ronda" : avisos.innerText = "Elige el trabajador que desees comprar. Sino, puedes volver";
     boton3.onclick = interfazInicial;
     if (volverAComprar){
@@ -253,9 +194,6 @@ function venderSlurm(){
     const dineroGeneradoPorTrabajador = trabajadoresAdquiridos.map((el) => el.ventaRonda);
     const totalDineroPorTrabajadores = dineroGeneradoPorTrabajador.reduce((acumulador,elemento) => acumulador + elemento, 0);
 
-    console.log(dineroGeneradoPorTrabajador);
-    console.log(totalDineroPorTrabajadores);
-    
     const cantidadGeneradaPorTrabajador = trabajadoresAdquiridos.map((el) => el.cantidadRonda);
     const totalCantidadPorTrabajadores = cantidadGeneradaPorTrabajador.reduce((acumulador,elemento) => acumulador + elemento, 0);
 
@@ -276,11 +214,6 @@ function iniciarRonda(){
         juegoEnEjecucion = true;
         boton2.className += " noMostrar";
         //________________________________________________________________________________________________________________________________________  OPERADOR TERNARIO
-        // if (trabajadoresAdquiridos.length == 0){
-        //     avisos.innerText = "No generaste dinero en esta ronda. No tienes trabajadores";
-        // }else{
-        //     avisos.innerText = "Las estadísticas de esta ronda las verás a continuación. Ya puedes pasar a la siguiente ronda";
-        // }
         trabajadoresAdquiridos.length == 0 ? avisos.innerText = "No generaste dinero en esta ronda. No tienes trabajadores" : avisos.innerText = "Las estadísticas de esta ronda las verás a continuación. Ya puedes pasar a la siguiente ronda";
 
         if (ronda ==10){
@@ -301,12 +234,11 @@ function iniciarRonda(){
     localStorage.setItem("ronda", JSON.stringify(ronda));
     venderSlurm();
     actualizarDatos();
-    console.log(ronda);
 };
 
 function reiniciar(){
+    localStorage.clear();
     inicializador = true;
-    localStorage.clear(); 
     iniciar()
 };
 
@@ -320,15 +252,9 @@ function finalizar(){
     let mensajeFinalEmpataste = `${nombreJugador.value} Has perdido! No generaste dinero.\nReuniste $${datosJugador.cajaRegistradora} pero le debes $500.000 al juego, por lo tanto quedaste con $${ventaTotal}`; 
     let mensajeFinalGanaste = `FELICIDADES! ${nombreJugador.value} eres el ganador. Ahora puedes llevarte una Robotzuela y 2 barriles de Slurm!\nReuniste $${datosJugador.cajaRegistradora} pero le debes $500.000 al juego, por lo tanto tu ganancia es de $${ventaTotal}`;
     //________________________________________________________________________________________________________________________________________  OPERADOR TERNARIO
-    // if (ventaTotal < 0) {
-    //     avisos.innerText = mensajeFinalPerdiste;
-    // } else if (ventaTotal == 0) {
-    //     avisos.innerText = mensajeFinalEmpataste;
-    // } else {
-    //     avisos.innerText = mensajeFinalGanaste;
-    // }
     ventaTotal < 0 ? avisos.innerText = mensajeFinalPerdiste : ventaTotal == 0 ? avisos.innerText = mensajeFinalEmpataste : avisos.innerText = mensajeFinalGanaste;
     localStorage.clear(); 
+    inicializador = true;
 };
 
 function comprarTrabajador(id){
