@@ -240,9 +240,39 @@ function iniciarRonda(){
     }
     localStorage.setItem("ronda", JSON.stringify(ronda));
     localStorage.setItem("volverAComprar", JSON.stringify(volverAComprar));
-    venderSlurm();
-    actualizarDatos();
+    //  Agregar SetTimeout para que cada venta de cada ronda demore unos segundos
+    vendiendo();
+    setTimeout(() => {
+        venderSlurm();
+        actualizarDatos();
+    }, 5000);
 };
+
+//  Sweet alert para las ventas por ronda
+function vendiendo(){
+    let timerInterval;
+    Swal.fire({
+        title: "Tus trabajadores están vendiendo",
+        html: "La ronda finaliza en <b></b> segundos.",
+        timer: 5000,
+        timerProgressBar: true,
+        didOpen: () => {
+            Swal.showLoading();
+            const timer = Swal.getPopup().querySelector("b");
+            timerInterval = setInterval(() => {
+            timer.textContent = `${parseInt((Swal.getTimerLeft()/1000)+1)}`;
+            }, 1000);
+        },
+        willClose: () => {
+            clearInterval(timerInterval);
+        }
+        }).then((result) => {
+        /* Read more about handling dismissals below */
+        if (result.dismiss === Swal.DismissReason.timer) {
+            console.log("Se ha cerrado el temporizador");
+        }
+    });
+}
 
 function reiniciar(){
     localStorage.clear();
@@ -327,3 +357,26 @@ function alertGanaste(){
     })
 };
 
+
+
+
+/*
+
+setTimeout(() => {
+    },2000)
+    milisegundos
+    puedo agregar una función
+
+aplicación: En cada ronda esperar un tiempo en el que se supone que mis trabajadores estna vendiendo slurm
+podría agregar un S.A con un temportizador
+
+
+
+
+CALL STACK
+
+
+
+
+
+*/
