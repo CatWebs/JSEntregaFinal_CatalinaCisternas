@@ -169,8 +169,10 @@ function abrirTienda() {
     textoBoton3.innerText = "Volver";
     boton2.className += " noMostrar";
     boton1.className += " noMostrar";
+    let noTienesTrabajadores = "Avisos: No tienes trabajadores. Te recomiendo comprar, de lo contrario no tendras ventas en esta ronda";
+    let eligeTrabajador = "Elige el trabajador que desees comprar. Sino, puedes volver";
     //________________________________________________________________________________________________________________________________________  OPERADOR TERNARIO
-    trabajadoresAdquiridos.length == 0 ? avisos.innerText = "Avisos: No tienes trabajadores. Te recomiendo comprar, de lo contrario no tendras ventas en esta ronda" : avisos.innerText = "Elige el trabajador que desees comprar. Sino, puedes volver";
+    trabajadoresAdquiridos.length == 0 ? avisos.innerText = noTienesTrabajadores : avisos.innerText = eligeTrabajador ;
     boton3.onclick = interfazInicial;
     if (volverAComprar){
         mostrarTrabajadores();
