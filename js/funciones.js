@@ -163,6 +163,7 @@ function iniciar(){
         avisos.innerText = `Ha ocurrido un problema. Ya has iniciado. Si quieres volver a empezar presiona "Reiniciar Juego"`;
     }
     inicializador = false;
+    localStorage.setItem("inicializador", JSON.stringify(inicializador));
 }
 
 function abrirTienda() {
@@ -177,6 +178,7 @@ function abrirTienda() {
     if (volverAComprar){
         mostrarTrabajadores();
         volverAComprar = false;
+        localStorage.setItem("volverAComprar", JSON.stringify(volverAComprar));
     }else{
         avisos.innerText = "Lo siento, ya compraste en esta ronda. Puedes probar en la siguiente";
     }
@@ -214,6 +216,7 @@ function iniciarRonda(){
         boton1.onclick = interfazInicial;
         crearCardAdquirido();
         juegoEnEjecucion = true;
+        localStorage.setItem("juegoEnEjecucion", JSON.stringify(juegoEnEjecucion));
         boton2.className += " noMostrar";
         let noHicisteDinero = "No generaste dinero en esta ronda. No tienes trabajadores";
         let pasaASiguienteRonda = "Las estadísticas de esta ronda las verás a continuación. Ya puedes pasar a la siguiente ronda";
@@ -236,6 +239,7 @@ function iniciarRonda(){
         avisos.innerText = "Has terminado la última ronda. Ve a finalizar para ver tus resultados "
     }
     localStorage.setItem("ronda", JSON.stringify(ronda));
+    localStorage.setItem("volverAComprar", JSON.stringify(volverAComprar));
     venderSlurm();
     actualizarDatos();
 };
@@ -243,6 +247,7 @@ function iniciarRonda(){
 function reiniciar(){
     localStorage.clear();
     inicializador = true;
+    localStorage.setItem("inicializador", JSON.stringify(inicializador));
     iniciar()
 };
 
@@ -259,6 +264,13 @@ function comprarTrabajador(id){
         localStorage.setItem("datosJugador", JSON.stringify(datosJugador));
         actualizarDatos();
         avisos.innerText = `Has comprado a ${nuevoAdquirido.nombre}`;
+        // Inclusión de Toastify
+        Toastify({
+            text: `Ahora ${nuevoAdquirido.nombre} es parte de tu equipo`,
+            duration: 3000,
+            gravity: "bottom", 
+            position: "right",
+        }).showToast();
         crearCardAdquirido()
     }else{
         avisos.innerText = `No te alcanza para este jugador, prueba con otro`;
@@ -279,6 +291,7 @@ function finalizar(){
     ventaTotal < 0 ? alertPerdedor() : ventaTotal == 0 ? alertEmpate() : alertGanaste();
     localStorage.clear(); 
     inicializador = true;
+    localStorage.setItem("inicializador", JSON.stringify(inicializador));
 };
 
 function alertPerdedor(){
@@ -310,7 +323,7 @@ function alertGanaste(){
         imageUrl: './media/robotzuela.jpg',
         imageWidth: 400,
         imageHeight: 305,
-        imageAlt: 'Bender de Futurama con una Robotzuela',
+        imageAlt: 'Bender de Futurama con unas Robotzuelas',
     })
 };
 
