@@ -215,8 +215,10 @@ function iniciarRonda(){
         crearCardAdquirido();
         juegoEnEjecucion = true;
         boton2.className += " noMostrar";
+        let noHicisteDinero = "No generaste dinero en esta ronda. No tienes trabajadores";
+        let pasaASiguienteRonda = "Las estadísticas de esta ronda las verás a continuación. Ya puedes pasar a la siguiente ronda";
         //________________________________________________________________________________________________________________________________________  OPERADOR TERNARIO
-        trabajadoresAdquiridos.length == 0 ? avisos.innerText = "No generaste dinero en esta ronda. No tienes trabajadores" : avisos.innerText = "Las estadísticas de esta ronda las verás a continuación. Ya puedes pasar a la siguiente ronda";
+        trabajadoresAdquiridos.length == 0 ? avisos.innerText = noHicisteDinero : avisos.innerText = pasaASiguienteRonda;
 
         if (ronda ==10){
             volverAComprar = false;
@@ -244,21 +246,6 @@ function reiniciar(){
     iniciar()
 };
 
-
-function finalizar(){
-    boton1.className += " noMostrar";
-    boton2.className += " noMostrar";
-    boton3.className += " noMostrar";
-    ventaTotal = parseInt(datosJugador.cajaRegistradora - datosJugador.deudaInversion);
-    let mensajeFinalPerdiste = `${nombreJugador.value}, lamento informarte que has perdido. Más suerte la próxima vez\nReuniste $${datosJugador.cajaRegistradora} pero le debes $500.000 al juego, por lo tanto tu saldo negativo es de $${ventaTotal}`;
-    let mensajeFinalEmpataste = `${nombreJugador.value} Has perdido! No generaste dinero.\nReuniste $${datosJugador.cajaRegistradora} pero le debes $500.000 al juego, por lo tanto quedaste con $${ventaTotal}`; 
-    let mensajeFinalGanaste = `FELICIDADES! ${nombreJugador.value} eres el ganador. Ahora puedes llevarte una Robotzuela y 2 barriles de Slurm!\nReuniste $${datosJugador.cajaRegistradora} pero le debes $500.000 al juego, por lo tanto tu ganancia es de $${ventaTotal}`;
-    //________________________________________________________________________________________________________________________________________  OPERADOR TERNARIO
-    ventaTotal < 0 ? avisos.innerText = mensajeFinalPerdiste : ventaTotal == 0 ? avisos.innerText = mensajeFinalEmpataste : avisos.innerText = mensajeFinalGanaste;
-    localStorage.clear(); 
-    inicializador = true;
-};
-
 function comprarTrabajador(id){
     if (trabajadoresDisponibles[id-1].precio <= datosJugador.cajaRegistradora){
         trabajadoresAdquiridos.push(trabajadoresDisponibles[id -1]);
@@ -279,4 +266,51 @@ function comprarTrabajador(id){
     }
 }
 
+function finalizar(){
+    boton1.className += " noMostrar";
+    boton2.className += " noMostrar";
+    boton3.className += " noMostrar";
+    ventaTotal = parseInt(datosJugador.cajaRegistradora - datosJugador.deudaInversion);
+    let mensajeFinalPerdiste = `${nombreJugador.value}, lamento informarte que has perdido. Más suerte la próxima vez\nReuniste $${datosJugador.cajaRegistradora} pero le debes $500.000 al juego, por lo tanto tu saldo negativo es de $${ventaTotal}`;
+    let mensajeFinalEmpataste = `${nombreJugador.value} Has perdido! No generaste dinero.\nReuniste $${datosJugador.cajaRegistradora} pero le debes $500.000 al juego, por lo tanto quedaste con $${ventaTotal}`; 
+    let mensajeFinalGanaste = `FELICIDADES! ${nombreJugador.value} eres el ganador. Ahora puedes llevarte una Robotzuela y 2 barriles de Slurm!\nReuniste $${datosJugador.cajaRegistradora} pero le debes $500.000 al juego, por lo tanto tu ganancia es de $${ventaTotal}`;
+    //________________________________________________________________________________________________________________________________________  OPERADOR TERNARIO
+    ventaTotal < 0 ? avisos.innerText = mensajeFinalPerdiste : ventaTotal == 0 ? avisos.innerText = mensajeFinalEmpataste : avisos.innerText = mensajeFinalGanaste;
+    ventaTotal < 0 ? alertPerdedor() : ventaTotal == 0 ? alertEmpate() : alertGanaste();
+    localStorage.clear(); 
+    inicializador = true;
+};
+
+function alertPerdedor(){
+    Swal.fire({
+        title: 'Perdiste!',
+        text: 'Tendrás problemas con la mafia Robot',
+        imageUrl: './media/Robot-Mafia.jpg',
+        imageWidth: 400,
+        imageHeight: 225,
+        imageAlt: 'Mafia Robot de Futurama',
+    })
+};
+
+function alertEmpate(){
+    Swal.fire({
+        title: 'Empataste!',
+        text: 'Bender no volverá a hacer negocios contigo',
+        imageUrl: './media/202_bender-gun.gif.jpg',
+        imageWidth: 400,
+        imageHeight: 298,
+        imageAlt: 'Bender de Futurama enojado',
+    })
+};
+
+function alertGanaste(){
+    Swal.fire({
+        title: 'Has Ganado!',
+        text: 'Aquí estan las Robotzuelas!',
+        imageUrl: './media/robotzuela.jpg',
+        imageWidth: 400,
+        imageHeight: 305,
+        imageAlt: 'Bender de Futurama con una Robotzuela',
+    })
+};
 
