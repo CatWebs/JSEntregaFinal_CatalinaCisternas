@@ -267,7 +267,6 @@ function vendiendo(){
             clearInterval(timerInterval);
         }
         }).then((result) => {
-        /* Read more about handling dismissals below */
         if (result.dismiss === Swal.DismissReason.timer) {
             console.log("Se ha cerrado el temporizador");
         }
@@ -357,26 +356,53 @@ function alertGanaste(){
     })
 };
 
+//  USO DE FETCH CON OTRA FORMA DE MOSTRAR TRABAJADORES 
 
+// fetch("./js/data.json")
+// .then(respuesta => respuesta.json())
+// .then(data => {
+//     data.forEach(el => {
+//         crearCardFetch(el);
+//     })
+// });
 
+function crearCardFetch(el){
+    const container = document.getElementById("trabajadoresFetch")
+    
+    const card = document.createElement("div");
+    card.className = "cardFetch";
+    const srcComponente = el.id;
 
-/*
+    const imagen = document.createElement("img");
+    imagen.src = el.imagen;
 
-setTimeout(() => {
-    },2000)
-    milisegundos
-    puedo agregar una función
+    const nombre = document.createElement("p");
+    nombre.className = `nombre${srcComponente}`;
+    nombre.innerText = `Nombre del trabajador: ${el.nombre}`;
+            
+    const precio = document.createElement("p");
+    precio.className = `precio${srcComponente}`;
+    precio.innerText = `El sueldo que cobra es: $${el.precio}`;
 
-aplicación: En cada ronda esperar un tiempo en el que se supone que mis trabajadores estna vendiendo slurm
-podría agregar un S.A con un temportizador
+    card.appendChild(imagen);
+    card.appendChild(nombre);
+    card.appendChild(precio);
+            
+    container.append(card)
+}
 
+//  USO DE ASYNC AND AWAIT PARA MOSTRAR DATA DE TRABAJADORES
 
+async function trabajadoresAsyncAwait(){
+    try{
+        const respuesta = await fetch("./js/data.json");
+        const data = await respuesta.json();
+        data.forEach(el => {
+            crearCardFetch(el);
+        });
+    } catch(error){
+        console.error(error);
+    }
+}
 
-
-CALL STACK
-
-
-
-
-
-*/
+trabajadoresAsyncAwait();
