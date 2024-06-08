@@ -34,56 +34,66 @@ function crearCardAdquirido(){
     }
 };
 
-// Con esta función muestro las Card donde presento a los trabajadores disponibles.
-function mostrarTrabajadores() {
-    trabajadoresContainer.innerHTML = "";
-    trabajadoresDisponibles.forEach(el => {
-        const card = document.createElement("div");
-        card.className = "card trabajador";
-        card.className += ` trabajador${el.id}`;
+
+//  Funcion CARD para mostrar trabajadores con FETCH
+function crearCardFetch(el){
+    const card = document.createElement("div");
+    card.className = "card trabajador";
+    card.className += ` trabajador${el.id}`;
     
-        const titulo = document.createElement("p");
-        titulo.className = "card-title";
-        titulo.innerText = `Trabajador ${el.id}`;
-        titulo.className += ` titulo${el.id}`;
+    const titulo = document.createElement("p");
+    titulo.className = "card-title";
+    titulo.innerText = `Trabajador ${el.id}`;
+    titulo.className += ` titulo${el.id}`;
     
-        const nombres = document.createElement("p");
-        nombres.className = "nombre card-subtitle";
-        nombres.innerText = el.nombre;
+    const nombres = document.createElement("p");
+    nombres.className = "nombre card-subtitle";
+    nombres.innerText = el.nombre;
     
-        const precio = document.createElement("p");
-        precio.innerText = `Precio: $${el.precio}`;
+    const precio = document.createElement("p");
+    precio.innerText = `Precio: $${el.precio}`;
     
-        const bonus = document.createElement("p");
-        bonus.innerText = `Bonus: ${el.porcentaje}`;
+    const bonus = document.createElement("p");
+    bonus.innerText = `Bonus: ${el.porcentaje}`;
     
-        const imagen = document.createElement("img");
-        imagen.src = el.imagen;
-        imagen.alt = `imagen de ${el.nombre}`;
-        imagen.className = "card-img-bottom";
+    const imagen = document.createElement("img");
+    imagen.src = el.imagen;
+    imagen.alt = `imagen de ${el.nombre}`;
+    imagen.className = "card-img-bottom";
     
-        const comprar = document.createElement("button");
-        comprar.className = `boton${el.id} btn comprar-boton`;
-        comprar.innerText = "Comprar";
+    const comprar = document.createElement("button");
+    comprar.className = `boton${el.id} btn comprar-boton`;
+    comprar.innerText = "Comprar";
         
-        const identificador = el.id;
-        if (trabajadoresAdquiridos.some(el => el.id === identificador)){
-            comprar.className = "btn no-disponible";
-            comprar.innerText = "Ya lo tienes";
-        } else{
-            comprar.className = "btn comprar-boton";
-            comprar.onclick = () => comprarTrabajador(el.id);
-        }
-        card.appendChild(titulo);
-        card.appendChild(nombres);
-        card.appendChild(precio);
-        card.appendChild(bonus);
-        card.appendChild(imagen);
-        card.appendChild(comprar);
-        trabajadoresContainer.appendChild(card);
-    });
+    const identificador = el.id;
+    if (trabajadoresAdquiridos.some(el => el.id === identificador)){
+        comprar.className = "btn no-disponible";
+        comprar.innerText = "Ya lo tienes";
+    } else{
+        comprar.className = "btn comprar-boton";
+        comprar.onclick = () => comprarTrabajador(el.id);
+    }
+    card.appendChild(titulo);
+    card.appendChild(nombres);
+    card.appendChild(precio);
+    card.appendChild(bonus);
+    card.appendChild(imagen);
+    card.appendChild(comprar);
+    trabajadoresContainer.appendChild(card);
 }
 
+// Con esta función muestro las Card donde presento a los trabajadores disponibles.
+async function mostrarTrabajadores() {
+    try{
+        const respuesta = await fetch("./js/data.json");
+        const data = await respuesta.json();
+        data.forEach(el => {
+            crearCardFetch(el);
+        });
+    } catch(error){
+        console.error(error);
+    }
+}
 
 let ronda;
 let datosJugador;
@@ -155,6 +165,8 @@ function interfazInicial(){
 function iniciar(){
     variablesIniciales();
     if (inicializador){
+        inicializador = false;
+        localStorage.setItem("inicializador", JSON.stringify(inicializador));
         variablesIniciales();
         interfaz.className = "interfaz";
         interfazInicial();
@@ -162,8 +174,6 @@ function iniciar(){
     }else{
         avisos.innerText = `Ha ocurrido un problema. Ya has iniciado. Si quieres volver a empezar presiona "Reiniciar Juego"`;
     }
-    inicializador = false;
-    localStorage.setItem("inicializador", JSON.stringify(inicializador));
 }
 
 function abrirTienda() {
@@ -245,7 +255,7 @@ function iniciarRonda(){
     setTimeout(() => {
         venderSlurm();
         actualizarDatos();
-    }, 5000);
+    }, 2900);
 };
 
 //  Sweet alert para las ventas por ronda
@@ -254,7 +264,7 @@ function vendiendo(){
     Swal.fire({
         title: "Tus trabajadores están vendiendo",
         html: "La ronda finaliza en <b></b> segundos.",
-        timer: 5000,
+        timer: 3000,
         timerProgressBar: true,
         didOpen: () => {
             Swal.showLoading();
@@ -356,53 +366,44 @@ function alertGanaste(){
     })
 };
 
-//  USO DE FETCH CON OTRA FORMA DE MOSTRAR TRABAJADORES 
 
-// fetch("./js/data.json")
-// .then(respuesta => respuesta.json())
-// .then(data => {
-//     data.forEach(el => {
-//         crearCardFetch(el);
-//     })
-// });
-
-function crearCardFetch(el){
-    const container = document.getElementById("trabajadoresFetch")
+// function crearCardFetch(el){
+//     const container = document.getElementById("trabajadoresFetch")
     
-    const card = document.createElement("div");
-    card.className = "cardFetch";
-    const srcComponente = el.id;
+//     const card = document.createElement("div");
+//     card.className = "cardFetch";
+//     const srcComponente = el.id;
 
-    const imagen = document.createElement("img");
-    imagen.src = el.imagen;
+//     const imagen = document.createElement("img");
+//     imagen.src = el.imagen;
 
-    const nombre = document.createElement("p");
-    nombre.className = `nombre${srcComponente}`;
-    nombre.innerText = `Nombre del trabajador: ${el.nombre}`;
+//     const nombre = document.createElement("p");
+//     nombre.className = `nombre${srcComponente}`;
+//     nombre.innerText = `Nombre del trabajador: ${el.nombre}`;
             
-    const precio = document.createElement("p");
-    precio.className = `precio${srcComponente}`;
-    precio.innerText = `El sueldo que cobra es: $${el.precio}`;
+//     const precio = document.createElement("p");
+//     precio.className = `precio${srcComponente}`;
+//     precio.innerText = `El sueldo que cobra es: $${el.precio}`;
 
-    card.appendChild(imagen);
-    card.appendChild(nombre);
-    card.appendChild(precio);
+//     card.appendChild(imagen);
+//     card.appendChild(nombre);
+//     card.appendChild(precio);
             
-    container.append(card)
-}
+//     container.append(card)
+// }
 
-//  USO DE ASYNC AND AWAIT PARA MOSTRAR DATA DE TRABAJADORES
+// //  USO DE ASYNC AND AWAIT PARA MOSTRAR DATA DE TRABAJADORES
 
-async function trabajadoresAsyncAwait(){
-    try{
-        const respuesta = await fetch("./js/data.json");
-        const data = await respuesta.json();
-        data.forEach(el => {
-            crearCardFetch(el);
-        });
-    } catch(error){
-        console.error(error);
-    }
-}
+// async function trabajadoresAsyncAwait(){
+//     try{
+//         const respuesta = await fetch("./js/data.json");
+//         const data = await respuesta.json();
+//         data.forEach(el => {
+//             crearCardFetch(el);
+//         });
+//     } catch(error){
+//         console.error(error);
+//     }
+// }
 
-trabajadoresAsyncAwait();
+// trabajadoresAsyncAwait();
